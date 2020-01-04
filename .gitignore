@@ -1,0 +1,11 @@
+venv/
+*.pyc
+*.swp
+*.docx
+*.kml
+*.iml
+/.idea
+*/target/
+/target/
+/.git
+/out
