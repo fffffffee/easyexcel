@@ -4,7 +4,8 @@ venv/
 *.docx
 *.kml
 *.iml
-/.idea
+/.idea/
+*/.idea/
 */target/
 /target/
 /.git
