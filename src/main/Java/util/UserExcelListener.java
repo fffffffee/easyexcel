@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserExcelListener extends AnalysisEventListener<User> {
-    //private static final Logger LOGGER = LoggerFactory.getLogger(UserExcelListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserExcelListener.class);
 
     /**
      * 批处理阈值
@@ -19,18 +19,26 @@ public class UserExcelListener extends AnalysisEventListener<User> {
     private static final int BATCH_COUNT = 2;
     List<User> list = new ArrayList<User>(BATCH_COUNT);
 
+    List<User> usersList = new ArrayList<User>();
+
+    private User user;
+    public UserExcelListener() {
+        user = new User();
+    }
+
     @Override
     public void invoke(User user , AnalysisContext analysisContext) {
-        //LOGGER.info("解析到一条数据:{}" , JSON.toJSONString(user));
+
+        LOGGER.info("-----解析到一条数据:{}" , JSON.toJSONString(user));
         System.out.println("解析到一条数据:" + JSON.toJSONString(user));
-        System.out.println("解析到一条数据:" + user.getName());
         list.add(user);
+        usersList.add(user);
         if (list.size() >= BATCH_COUNT) {
             saveData();
             list.clear();
         }
     }
-
+    @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
         saveData();
         //LOGGER.info("所有数据解析完成！");
@@ -41,6 +49,11 @@ public class UserExcelListener extends AnalysisEventListener<User> {
         //LOGGER.info("{}条数据，开始存储数据库！" , list.size());
         //LOGGER.info("存储数据库成功！");
         System.out.println("存储数据库成功！");
+
+    }
+
+    public List<User> getUsersList() {
+        return usersList;
     }
 
 }
