@@ -28,14 +28,14 @@ public class UserExcelListener extends AnalysisEventListener<User> {
 
     @Override
     public void invoke(User user , AnalysisContext analysisContext) {
-
-        LOGGER.info("-----解析到一条数据:{}" , JSON.toJSONString(user));
         System.out.println("解析到一条数据:" + JSON.toJSONString(user));
         list.add(user);
         usersList.add(user);
         if (list.size() >= BATCH_COUNT) {
             saveData();
             list.clear();
+        LOGGER.info("-----解析到一条数据:{}" , JSON.toJSONString(user));
+
         }
     }
     @Override
