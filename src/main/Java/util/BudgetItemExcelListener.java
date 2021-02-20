@@ -3,12 +3,16 @@ package util;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.fastjson.JSON;
+import helper.DatabaseHelper;
+import mapper.BeanMapConvert;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pojo.BudgetItem;
 
+import java.beans.IntrospectionException;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +38,7 @@ public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem> {
         budgetItem = new BudgetItem();
     }
 
+    /**
     @Override
     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
         LOGGER.info("解析到一条头数据:{}", JSON.toJSONString(headMap));
@@ -56,7 +61,15 @@ public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem> {
 
         //达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
         if (list.size() >= BATCH_COUNT) {
-            saveData();
+            try {
+                saveData();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IntrospectionException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
             //存储完成清理 list
             list.clear();
         }
@@ -70,7 +83,15 @@ public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem> {
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
         //这里也要保存数据，确保最后遗留的数据也存储到数据库
-        saveData();
+        try {
+            saveData();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
         LOGGER.info("所有数据解析完成！");
         System.out.println("所有数据解析完成！");
     }
@@ -78,7 +99,12 @@ public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem> {
     /**
      * 加上存储数据库
      */
-    private void saveData() {
+    private void saveData() throws IllegalAccessException, IntrospectionException, InvocationTargetException {
+        for (BudgetItem budgetItem : list) {
+            System.out.println(JSON.toJSON(budgetItem));
+            Map budgetItemMap = BeanMapConvert.convertBean(budgetItem);
+            DatabaseHelper.insertEntity(BudgetItem.class, budgetItemMap);
+        }
         LOGGER.info("{}条数据，开始存储数据库！", list.size());
         LOGGER.info("存储数据库成功！");
         System.out.println(list.size() + "条数据，开始存储数据库！");
