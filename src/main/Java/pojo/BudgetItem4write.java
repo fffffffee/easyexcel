@@ -27,14 +27,6 @@ public class BudgetItem4write {
     @ExcelProperty({"数量"})
     private float quantity;
 
-    //@ExcelProperty(index = 4)
-    @ExcelProperty({"单价"})
-    private float unitprice;
-
-    //@ExcelProperty(index = 5)
-    @ExcelProperty({"合价"})
-    private float combinedprice;
-
     public BudgetItem4write() {
     }
 
@@ -70,19 +62,4 @@ public class BudgetItem4write {
         this.quantity = quantity;
     }
 
-    public float getUnitprice() {
-        return unitprice;
-    }
-
-    public void setUnitprice(float unitprice) {
-        this.unitprice = unitprice;
-    }
-
-    public float getCombinedprice() {
-        return combinedprice;
-    }
-
-    public void setCombinedprice(float combinedprice) {
-        this.combinedprice = combinedprice;
-    }
 }

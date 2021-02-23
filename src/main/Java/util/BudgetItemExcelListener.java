@@ -100,10 +100,13 @@ public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem4re
      * 加上存储数据库
      */
     private void saveData() throws IllegalAccessException, IntrospectionException, InvocationTargetException {
+        int i = 1;
         for (BudgetItem4read budgetItem4read : list) {
+            budgetItem4read.setSerialnumberofstandard(String.valueOf(i));
             System.out.println(JSON.toJSON(budgetItem4read));
             Map budgetItemMap = BeanMapConvert.convertBean(budgetItem4read);
             DatabaseHelper.insertEntity(BudgetItem4read.class, budgetItemMap);
+            i++;
         }
         LOGGER.info("{}条数据，开始存储数据库！", list.size());
         LOGGER.info("存储数据库成功！");
