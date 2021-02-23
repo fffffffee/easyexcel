@@ -1,8 +1,6 @@
 package java;
 
 import org.junit.Before;
-import org.junit.Test;
-import pojo.BudgetItem;
 import service.BudgetItemRead;
 
 /**

@@ -8,7 +8,7 @@ import mapper.BeanMapConvert;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.BudgetItem;
+import pojo.BudgetItem4read;
 
 import java.beans.IntrospectionException;
 import java.io.File;
@@ -24,18 +24,18 @@ import java.util.Map;
  * @date 20210214
  * @version 1.0.0
  */
-public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem> {
+public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem4read> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BudgetItemExcelListener.class);
 
     /**
      * 每隔5条存储数据库，实际使用中可以3000条，然后清理list，方便内存回收。
      */
-    private static final int BATCH_COUNT =5;
-    List<BudgetItem> list = new ArrayList<BudgetItem>();
+    private static final int BATCH_COUNT =1000;
+    List<BudgetItem4read> list = new ArrayList<BudgetItem4read>();
 
-    private BudgetItem budgetItem;
+    private BudgetItem4read budgetItem4read;
     public BudgetItemExcelListener(){
-        budgetItem = new BudgetItem();
+        budgetItem4read = new BudgetItem4read();
     }
 
     /**
@@ -51,7 +51,7 @@ public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem> {
      *  one row value. It is same as{@link //Todo}
      */
     @Override
-    public void invoke(BudgetItem data, AnalysisContext context) {
+    public void invoke(BudgetItem4read data, AnalysisContext context) {
         PropertyConfigurator.configure(System.getProperty("user.dir") + File.separator + "src/main/resources/log4j.properties");
         LOGGER.info("解析到一条数据:{}", JSON.toJSONString(data));
         if((data.getSerialnumberofstandard() != null)&&(data.getSerialnumberofstandard().contains("Y")||data.getSerialnumberofstandard().contains("G"))) {
@@ -100,10 +100,10 @@ public class BudgetItemExcelListener extends AnalysisEventListener<BudgetItem> {
      * 加上存储数据库
      */
     private void saveData() throws IllegalAccessException, IntrospectionException, InvocationTargetException {
-        for (BudgetItem budgetItem : list) {
-            System.out.println(JSON.toJSON(budgetItem));
-            Map budgetItemMap = BeanMapConvert.convertBean(budgetItem);
-            DatabaseHelper.insertEntity(BudgetItem.class, budgetItemMap);
+        for (BudgetItem4read budgetItem4read : list) {
+            System.out.println(JSON.toJSON(budgetItem4read));
+            Map budgetItemMap = BeanMapConvert.convertBean(budgetItem4read);
+            DatabaseHelper.insertEntity(BudgetItem4read.class, budgetItemMap);
         }
         LOGGER.info("{}条数据，开始存储数据库！", list.size());
         LOGGER.info("存储数据库成功！");

@@ -4,12 +4,11 @@ import com.alibaba.excel.EasyExcel;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pojo.BudgetItem;
+import pojo.BudgetItem4read;
 import util.BudgetItemExcelListener;
 import util.TestFileUtil;
 
 import java.io.File;
-import java.util.Properties;
 
 /**
  * 读的常见写法
@@ -27,8 +26,11 @@ public class BudgetItemRead {
         String fileName = System.getProperty("user.dir") + File.separator + "单项预算.xls";
         System.out.println(fileName);
         System.out.println(TestFileUtil.getPath());
+        //先清空数据库
+        //Todo
+        //DatabaseHelper.executeQuery()
         //这里需要指定读用那个class去读，然后读取第一个sheet，文件流会自动关闭
-        EasyExcel.read(fileName, BudgetItem.class, new BudgetItemExcelListener()).sheet().headRowNumber(6).doRead();
+        EasyExcel.read(fileName, BudgetItem4read.class, new BudgetItemExcelListener()).sheet().headRowNumber(6).doRead();
 
     }
 }
